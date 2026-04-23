@@ -94,7 +94,7 @@ function substituteObj(obj, row, env) {
 // }
 // ─── Real API caller ──────────────────────────────────────────────────────────
 async function callAPI(req) {
-  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("API BASE URL:", "https://api.toorakcapital.info/");
   console.log("Original URL:", req.url);
   const start = Date.now();
   try {
