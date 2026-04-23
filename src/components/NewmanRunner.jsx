@@ -60,7 +60,7 @@ function substituteObj(obj, row, env) {
 async function callAPI(req) {
   const start = Date.now();
   try {
-    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, "${import.meta.env.VITE_API_BASE_URL}");
+    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, import.meta.env.VITE_API_BASE_URL);
     const res = await fetch(proxyUrl, {
       method: req.method,
       headers: { "Content-Type": "application/json", ...req.headers },
@@ -88,6 +88,8 @@ async function callAPI(req) {
       responseHeaders: [], error: err.message,
     };
   }
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("Original URL:", req.url);
 }
 
 // ─── UploadCard ───────────────────────────────────────────────────────────────
