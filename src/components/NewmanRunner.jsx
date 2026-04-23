@@ -98,7 +98,7 @@ async function callAPI(req) {
   console.log("Original URL:", req.url);
   const start = Date.now();
   try {
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+    const baseUrl = "https://api.toorakcapital.info/";
     const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, baseUrl);
     console.log("Resolved URL:", proxyUrl);
     const res = await fetch(proxyUrl, {
