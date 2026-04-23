@@ -94,12 +94,12 @@ function substituteObj(obj, row, env) {
 // }
 // ─── Real API caller ──────────────────────────────────────────────────────────
 async function callAPI(req) {
-  console.log("API BASE URL:", "https://api.toorakcapital.info/");
+  console.log("API BASE URL:", "https://api.toorakcapital.info");
   console.log("Original URL:", req.url);
   const start = Date.now();
   try {
-    const baseUrl = "https://api.toorakcapital.info/";
-    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, baseUrl);
+    const baseUrl = "https://api.toorakcapital.info";
+    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, baseUrl).replace(/([^:])\/\/+/g, "$1/");;
     console.log("Resolved URL:", proxyUrl);
     const res = await fetch(proxyUrl, {
       method: req.method,
