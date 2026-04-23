@@ -60,7 +60,8 @@ function substituteObj(obj, row, env) {
 async function callAPI(req) {
   const start = Date.now();
   try {
-    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, import.meta.env.VITE_API_BASE_URL);
+    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, `import.meta.env.VITE_API_BASE_URL`);
+    console.log("Resolved URL:", proxyUrl);
     const res = await fetch(proxyUrl, {
       method: req.method,
       headers: { "Content-Type": "application/json", ...req.headers },
