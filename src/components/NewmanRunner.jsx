@@ -57,10 +57,49 @@ function substituteObj(obj, row, env) {
 }
 
 // ─── Real API caller ──────────────────────────────────────────────────────────
+// async function callAPI(req) {
+//   const start = Date.now();
+//   try {
+//     const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, `import.meta.env.VITE_API_BASE_URL`);
+//     console.log("Resolved URL:", proxyUrl);
+//     const res = await fetch(proxyUrl, {
+//       method: req.method,
+//       headers: { "Content-Type": "application/json", ...req.headers },
+//       body: ["GET", "HEAD"].includes(req.method) ? undefined : JSON.stringify(req.body),
+//     });
+//     const time = Date.now() - start;
+//     const resHeaders = [...res.headers.entries()].map(([key, value]) => ({ key, value }));
+//     let responseBody;
+//     const ct = res.headers.get("content-type") || "";
+//     if (ct.includes("application/json")) {
+//       const json = await res.json();
+//       responseBody = JSON.stringify(json, null, 2);
+//     } else {
+//       responseBody = await res.text();
+//     }
+//     return { pass: res.ok, statusCode: res.status, time, responseBody, responseHeaders: resHeaders, error: null };
+//   } catch (err) {
+//     const time = Date.now() - start;
+//     return {
+//       pass: false, statusCode: 0, time,
+//       responseBody: JSON.stringify({
+//         error: err.message, type: err.name,
+//         hint: "Request failed via Vite proxy. Make sure your vite.config.js has the proxy configured and the target API is reachable.",
+//       }, null, 2),
+//       responseHeaders: [], error: err.message,
+//     };
+//   }
+//   console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+//   console.log("Original URL:", req.url);
+// }
+// ─── Real API caller ──────────────────────────────────────────────────────────
 async function callAPI(req) {
+  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("Original URL:", req.url);
   const start = Date.now();
   try {
-    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, `import.meta.env.VITE_API_BASE_URL`);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "";
+    const proxyUrl = req.url.replace(/^https?:\/\/[^/]+/, baseUrl);
     console.log("Resolved URL:", proxyUrl);
     const res = await fetch(proxyUrl, {
       method: req.method,
@@ -84,13 +123,11 @@ async function callAPI(req) {
       pass: false, statusCode: 0, time,
       responseBody: JSON.stringify({
         error: err.message, type: err.name,
-        hint: "Request failed via Vite proxy. Make sure your vite.config.js has the proxy configured and the target API is reachable.",
+        hint: "Request failed. Check CORS and VITE_API_BASE_URL env variable.",
       }, null, 2),
       responseHeaders: [], error: err.message,
     };
   }
-  console.log("API BASE URL:", import.meta.env.VITE_API_BASE_URL);
-  console.log("Original URL:", req.url);
 }
 
 // ─── UploadCard ───────────────────────────────────────────────────────────────
